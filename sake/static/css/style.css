@@ -1,0 +1,24 @@
+.radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.radio-card {
+    width: 100px;
+    height: 100px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.radio-card.selected {
+    background-color: #e0e0e0;
+    border-color: #007bff;
+}
+input[type="radio"] {
+    display: none;
+}
