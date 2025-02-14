@@ -2,36 +2,75 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>ラジオボタン選択アプリ</title>
+    <title>日本酒選択アプリ</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <h1>ラジオボタン選択アプリ</h1>
+    <h1>日本酒選択アプリ</h1>
     <form id="radio-form">
-        <input type="radio" name="option" value="オプション1"> オプション1<br>
-        <input type="radio" name="option" value="オプション2"> オプション2<br>
-        <input type="radio" name="option" value="オプション3"> オプション3<br>
-        <button type="submit">送信</button>
+        <div id="group1">
+            <h3>日本酒の種類</h3>
+            <div class="radio-group">
+                <label class="radio-card" data-group="option1" data-value="吟醸酒">
+                    <input type="radio" name="option1" value="吟醸酒">
+                    吟醸酒
+                </label>
+                <label class="radio-card" data-group="option1" data-value="純米酒">
+                    <input type="radio" name="option1" value="純米酒">
+                    純米酒
+                </label>
+                <label class="radio-card" data-group="option1" data-value="本醸造酒">
+                    <input type="radio" name="option1" value="本醸造酒">
+                    本醸造酒
+                </label>
+            </div>
+        </div>
+        
+        <div id="group2">
+            <h3>日本酒度（甘口・辛口）</h3>
+            <div class="radio-group">
+                <label class="radio-card" data-group="option2" data-value="甘口">
+                    <input type="radio" name="option2" value="甘口">
+                    甘口
+                </label>
+                <label class="radio-card" data-group="option2" data-value="やや甘口">
+                    <input type="radio" name="option2" value="やや甘口">
+                    やや甘口
+                </label>
+                <label class="radio-card" data-group="option2" data-value="辛口">
+                    <input type="radio" name="option2" value="辛口">
+                    辛口
+                </label>
+            </div>
+        </div>
+        
+        <button type="submit">選択を確定</button>
     </form>
     <div id="result"></div>
 
     <script>
     $(document).ready(function() {
+        $('.radio-card').click(function() {
+            var group = $(this).data('group');
+            $('.radio-card[data-group="' + group + '"]').removeClass('selected');
+            $(this).addClass('selected');
+            $(this).find('input[type="radio"]').prop('checked', true);
+        });
+
         $('#radio-form').submit(function(e) {
             e.preventDefault();
-            var selection = $('input[name=option]:checked').val();
-            if (selection) {
-                $.ajax({
-                    url: '/submit',
-                    type: 'POST',
-                    data: {option: selection},
-                    success: function(response) {
-                        $('#result').text(response.result);
-                    }
-                });
-            } else {
-                $('#result').text('オプションを選択してください。');
-            }
+            var option1 = $('input[name=option1]:checked').val() || 'なし';
+            var option2 = $('input[name=option2]:checked').val() || 'なし';
+            
+            $.ajax({
+                url: '/submit',
+                type: 'POST',
+                data: {option1: option1, option2: option2},
+                success: function(response) {
+                    $('#result').text(response.result);
+                }
+            });
         });
     });
     </script>
